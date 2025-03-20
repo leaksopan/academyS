@@ -32,7 +32,7 @@ AcademyS adalah platform pembelajaran online yang menyediakan berbagai kursus de
 
 1. Clone repositori ini ke direktori web server Anda (misalnya: htdocs untuk XAMPP)
    ```
-   git clone https://github.com/username/AcademyS.git
+   git clone https://github.com/leaksopan/AcademyS.git
    ```
 
 2. Import database dari file `database.sql` ke MySQL
