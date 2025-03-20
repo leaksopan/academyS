@@ -12,6 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @property Course_model $course_model
  * @property Lesson_model $lesson_model
  * @property Quiz_model $quiz_model
+ * @property Coding_model $coding_model
  */
 class Admin extends CI_Controller {
 
@@ -19,7 +20,7 @@ class Admin extends CI_Controller {
         parent::__construct();
         $this->load->helper(['url', 'form']);
         $this->load->library(['session', 'form_validation']);
-        $this->load->model(['user_model', 'course_model', 'lesson_model', 'quiz_model']);
+        $this->load->model(['user_model', 'course_model', 'lesson_model', 'quiz_model', 'coding_model']);
         
         // Cek apakah user sudah login
         if (!$this->session->userdata('logged_in')) {
@@ -297,8 +298,7 @@ class Admin extends CI_Controller {
             $lesson_data = [
                 'title' => $this->input->post('title'),
                 'content' => $this->input->post('content'),
-                'order_number' => $this->input->post('order_number'),
-                'updated_at' => date('Y-m-d H:i:s')
+                'order_number' => $this->input->post('order_number')
             ];
             
             if ($this->lesson_model->update_lesson($id, $lesson_data)) {
@@ -986,5 +986,137 @@ class Admin extends CI_Controller {
         }
 
         redirect('admin/users');
+    }
+    
+    // Mengelola Coding Exercises
+    public function coding_exercises() {
+        if (!$this->session->userdata('logged_in')) {
+            redirect('auth/login');
+        }
+        
+        $this->load->model('coding_model');
+        
+        $data['title'] = 'Kelola Coding Exercises - AcademyS';
+        $data['exercises'] = $this->coding_model->get_all_exercises();
+        
+        $this->load->view('templates/header', $data);
+        $this->load->view('admin/coding_exercises', $data);
+        $this->load->view('templates/footer');
+    }
+    
+    public function add_coding_exercise() {
+        if (!$this->session->userdata('logged_in')) {
+            redirect('auth/login');
+        }
+        
+        $this->load->model(['coding_model', 'lesson_model']);
+        $this->load->library('form_validation');
+        
+        $data['lessons'] = $this->lesson_model->get_all_lessons_with_course();
+        
+        $this->form_validation->set_rules('title', 'Judul', 'required');
+        $this->form_validation->set_rules('lesson_id', 'Pelajaran', 'required');
+        $this->form_validation->set_rules('language', 'Bahasa', 'required');
+        $this->form_validation->set_rules('instructions', 'Instruksi', 'required');
+        $this->form_validation->set_rules('starter_code', 'Kode Awal', 'required');
+        $this->form_validation->set_rules('solution_code', 'Kode Solusi', 'required');
+        
+        if ($this->form_validation->run() === FALSE) {
+            $data['title'] = 'Tambah Coding Exercise - AcademyS';
+            
+            $this->load->view('templates/header', $data);
+            $this->load->view('admin/add_coding_exercise', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $exercise_data = [
+                'lesson_id' => $this->input->post('lesson_id'),
+                'title' => $this->input->post('title'),
+                'language' => $this->input->post('language'),
+                'instructions' => $this->input->post('instructions'),
+                'starter_code' => $this->input->post('starter_code'),
+                'solution_code' => $this->input->post('solution_code'),
+                'test_cases' => $this->input->post('test_cases')
+            ];
+            
+            if ($this->coding_model->add_exercise($exercise_data)) {
+                $this->session->set_flashdata('success', 'Coding exercise berhasil ditambahkan');
+                redirect('admin/coding_exercises');
+            } else {
+                $this->session->set_flashdata('error', 'Gagal menambahkan coding exercise');
+                redirect('admin/add_coding_exercise');
+            }
+        }
+    }
+    
+    public function edit_coding_exercise($id) {
+        if (!$this->session->userdata('logged_in')) {
+            redirect('auth/login');
+        }
+        
+        $this->load->model(['coding_model', 'lesson_model']);
+        $this->load->library('form_validation');
+        
+        $data['exercise'] = $this->coding_model->get_exercise($id);
+        
+        if (empty($data['exercise'])) {
+            show_404();
+        }
+        
+        $data['lessons'] = $this->lesson_model->get_all_lessons_with_course();
+        
+        $this->form_validation->set_rules('title', 'Judul', 'required');
+        $this->form_validation->set_rules('lesson_id', 'Pelajaran', 'required');
+        $this->form_validation->set_rules('language', 'Bahasa', 'required');
+        $this->form_validation->set_rules('instructions', 'Instruksi', 'required');
+        $this->form_validation->set_rules('starter_code', 'Kode Awal', 'required');
+        $this->form_validation->set_rules('solution_code', 'Kode Solusi', 'required');
+        
+        if ($this->form_validation->run() === FALSE) {
+            $data['title'] = 'Edit Coding Exercise - AcademyS';
+            
+            $this->load->view('templates/header', $data);
+            $this->load->view('admin/edit_coding_exercise', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $exercise_data = [
+                'lesson_id' => $this->input->post('lesson_id'),
+                'title' => $this->input->post('title'),
+                'language' => $this->input->post('language'),
+                'instructions' => $this->input->post('instructions'),
+                'starter_code' => $this->input->post('starter_code'),
+                'solution_code' => $this->input->post('solution_code'),
+                'test_cases' => $this->input->post('test_cases')
+            ];
+            
+            if ($this->coding_model->update_exercise($id, $exercise_data)) {
+                $this->session->set_flashdata('success', 'Coding exercise berhasil diperbarui');
+                redirect('admin/coding_exercises');
+            } else {
+                $this->session->set_flashdata('error', 'Gagal memperbarui coding exercise');
+                redirect('admin/edit_coding_exercise/' . $id);
+            }
+        }
+    }
+    
+    public function delete_coding_exercise($id) {
+        if (!$this->session->userdata('logged_in')) {
+            redirect('auth/login');
+        }
+        
+        $this->load->model('coding_model');
+        
+        $exercise = $this->coding_model->get_exercise($id);
+        
+        if (empty($exercise)) {
+            show_404();
+        }
+        
+        if ($this->coding_model->delete_exercise($id)) {
+            $this->session->set_flashdata('success', 'Coding exercise berhasil dihapus');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menghapus coding exercise');
+        }
+        
+        redirect('admin/coding_exercises');
     }
 } 

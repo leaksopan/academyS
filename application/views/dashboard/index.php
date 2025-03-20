@@ -3,12 +3,12 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-md-8">
-                <h1 class="mb-0">My Dashboard</h1>
-                <p class="lead">Welcome back, <?= $user['username'] ?>!</p>
+                <h1 class="mb-0">Dashboard saya</h1>
+                <p class="lead">Selamat Datang Kembali, <?= $user['username'] ?>!</p>
             </div>
             <div class="col-md-4 text-md-end">
                 <a href="<?= base_url('profile') ?>" class="btn btn-outline-primary">
-                    <i class="fas fa-user-circle me-2"></i> View Profile
+                    <i class="fas fa-user-circle me-2"></i> Lihat Profil
                 </a>
             </div>
         </div>
@@ -26,10 +26,10 @@
                         <i class="fas fa-tachometer-alt me-2"></i> Dashboard
                     </a>
                     <a href="<?= base_url('profile') ?>" class="list-group-item list-group-item-action">
-                        <i class="fas fa-user me-2"></i> My Profile
+                        <i class="fas fa-user me-2"></i> Profile Saya
                     </a>
                     <a href="<?= base_url('courses') ?>" class="list-group-item list-group-item-action">
-                        <i class="fas fa-book me-2"></i> Browse Courses
+                        <i class="fas fa-book me-2"></i> Telusuri Kursus
                     </a>
                     <a href="<?= base_url('logout') ?>" class="list-group-item list-group-item-action text-danger">
                         <i class="fas fa-sign-out-alt me-2"></i> Logout
@@ -38,15 +38,15 @@
                 
                 <div class="card mt-4">
                     <div class="card-header">
-                        <h5 class="mb-0">Learning Stats</h5>
+                        <h5 class="mb-0">Pencapaian</h5>
                     </div>
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-3">
-                            <span>Courses Enrolled:</span>
+                            <span>Kursus yang diikuti:</span>
                             <span class="badge bg-primary"><?= count($enrolled_courses) ?></span>
                         </div>
                         <div class="d-flex justify-content-between mb-3">
-                            <span>Courses Completed:</span>
+                            <span>Kursus yang selesai:</span>
                             <span class="badge bg-success">
                                 <?php
                                 $completed_courses = 0;
@@ -67,21 +67,38 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Progress Quiz -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Progress Quiz</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Quiz yang Lulus:</span>
+                            <span class="badge bg-success"><?php echo $quiz_model->count_passed_quizzes($user['id']); ?></span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Rata-rata Skor:</span>
+                            <span class="badge bg-info"><?php echo number_format($quiz_model->get_user_average_score($user['id']), 1); ?>%</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
+
             <!-- Main Content -->
             <div class="col-lg-9">
                 <!-- My Courses -->
                 <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4 class="mb-0">My Courses</h4>
-                        <a href="<?= base_url('courses') ?>" class="btn btn-sm btn-primary">Browse More Courses</a>
+                        <h4 class="mb-0">Kursus saya</h4>
+                        <a href="<?= base_url('courses') ?>" class="btn btn-sm btn-primary">Telusuri semua kursus</a>
                     </div>
                     <div class="card-body">
                         <?php if (empty($enrolled_courses)): ?>
                             <div class="alert alert-info">
-                                <i class="fas fa-info-circle me-2"></i> You haven't enrolled in any courses yet.
-                                <a href="<?= base_url('courses') ?>" class="alert-link">Browse our catalog</a> to get started.
+                                <i class="fas fa-info-circle me-2"></i> Kamu gak punya kursus sampai sekarang.
+                                <a href="<?= base_url('courses') ?>" class="alert-link">lihat catalog kita</a> untuk memulai.
                             </div>
                         <?php else: ?>
                             <div class="row">
@@ -122,7 +139,7 @@
                                                     </small>
                                                 </div>
                                                 
-                                                <a href="<?= base_url('courses/' . $course['slug']) ?>" class="btn btn-primary btn-sm">Continue Learning</a>
+                                                <a href="<?= base_url('courses/' . $course['slug']) ?>" class="btn btn-primary btn-sm">Lanjut Belajar</a>
                                             </div>
                                         </div>
                                     </div>
@@ -135,7 +152,7 @@
                 <!-- Recommended Courses -->
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="mb-0">Recommended for You</h4>
+                        <h4 class="mb-0">Rekomendasi untuk Kamu</h4>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -187,21 +204,7 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title">Progress Quiz</h5>
-                                <p class="card-text">
-                                    Quiz yang Lulus: <?php echo $quiz_model->count_passed_quizzes($user['id']); ?>
-                                </p>
-                                <p class="card-text">
-                                    Rata-rata Skor: <?php echo number_format($quiz_model->get_user_average_score($user['id']), 1); ?>%
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>

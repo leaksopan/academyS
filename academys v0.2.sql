@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 17, 2025 at 02:26 AM
+-- Generation Time: Mar 20, 2025 at 01:23 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -48,6 +48,33 @@ INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `created_at`) VAL
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `coding_exercises`
+--
+
+CREATE TABLE `coding_exercises` (
+  `id` int(11) NOT NULL,
+  `lesson_id` int(11) DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
+  `instructions` text NOT NULL,
+  `starter_code` text NOT NULL,
+  `solution_code` text NOT NULL,
+  `language` enum('html','css','javascript','php') NOT NULL,
+  `test_cases` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `coding_exercises`
+--
+
+INSERT INTO `coding_exercises` (`id`, `lesson_id`, `title`, `instructions`, `starter_code`, `solution_code`, `language`, `test_cases`, `created_at`) VALUES
+(1, 17, 'Test HTML', '<h3>Membuat Halaman Web Pertama</h3>\r\n<p>Pada latihan ini, kamu akan belajar membuat halaman web sederhana menggunakan HTML.</p>\r\n\r\n<h4>Tugas:</h4>\r\n<ol>\r\n  <li>Buat struktur dasar HTML dengan tag <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, dan <code>&lt;body&gt;</code></li>\r\n  <li>Di dalam tag <code>&lt;head&gt;</code>, tambahkan tag <code>&lt;title&gt;</code> dengan teks \"Halaman Pertamaku\"</li>\r\n  <li>Di dalam tag <code>&lt;body&gt;</code>, tambahkan:\r\n    <ul>\r\n      <li>Sebuah heading level 1 (<code>&lt;h1&gt;</code>) dengan teks \"Selamat Datang di Website Saya\"</li>\r\n      <li>Sebuah paragraf (<code>&lt;p&gt;</code>) dengan teks \"Ini adalah halaman web pertama yang saya buat dengan HTML\"</li>\r\n      <li>Sebuah heading level 2 (<code>&lt;h2&gt;</code>) dengan teks \"Tentang Saya\"</li>\r\n      <li>Sebuah paragraf lain yang berisi deskripsi singkat tentang dirimu</li>\r\n    </ul>\r\n  </li>\r\n</ol>\r\n\r\n<p>Pastikan semua tag ditutup dengan benar!</p>', '<!-- Tulis kode HTML kamu di sini -->\r\n', '<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>Halaman Pertamaku</title>\r\n</head>\r\n<body>\r\n    <h1>Selamat Datang di Website Saya</h1>\r\n    <p>Ini adalah halaman web pertama yang saya buat dengan HTML</p>\r\n    \r\n    <h2>Tentang Saya</h2>\r\n    <p>Saya adalah seorang siswa yang sedang belajar pemrograman web. Saya sangat tertarik dengan HTML dan ingin menjadi web developer.</p>\r\n</body>\r\n</html>', 'html', '[\r\n  {\r\n    \"input\": \"\",\r\n    \"expected\": \"Halaman Pertamaku\"\r\n  }\r\n]', '2025-03-17 03:45:01'),
+(2, 18, 'HTML Coding live', 'a', 'a\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n', 'a\r\n\r\n\r\n\r\n', 'html', 'a\r\n\r\n\r\n\r\n', '2025-03-17 07:05:52'),
+(4, 19, 'PHP1', '<?php\r\necho \"Hello World!\";\r\n?>', '<?php\r\necho \"Hello World!\";\r\n?>', '<?php\r\necho \"Hello World!\";\r\n?>', 'php', 'adw', '2025-03-18 07:39:48');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `courses`
 --
 
@@ -77,7 +104,9 @@ INSERT INTO `courses` (`id`, `title`, `slug`, `description`, `category_id`, `lev
 (6, 'Magang Divisi Meta', 'magang-divisi-meta', 'Course ini di ambil untuk anak magang divisi Meta', 4, 'beginner', NULL, 1, '2025-03-13 20:16:38', '2025-03-13 20:50:00'),
 (7, '[Magang] Pengenalan Teknologi PHP', 'magang-pengenalan-teknologi-php', 'Hari pertama.Ambil ini jika ini adalah hari pertamamu disini', 4, 'beginner', '8e86428f6fc480ba5c0bae58f9e2decd.png', 1, '2025-03-13 21:11:24', NULL),
 (8, 'Test Quiz', 'test-quiz', 'asd', 4, 'intermediate', '1b1e180278f282d1e1949016bf109c42.png', 1, '2025-03-13 23:41:48', '2025-03-13 23:41:53'),
-(9, '[Quiz] Magang', 'quiz-magang', 'Apa ya', 4, 'intermediate', NULL, 1, '2025-03-14 01:08:16', NULL);
+(9, '[Quiz] Magang', 'quiz-magang', 'Apa ya', 4, 'intermediate', NULL, 1, '2025-03-14 01:08:16', NULL),
+(10, 'Test Koding', 'test-koding', 'Ini untuk test Exercise koding', 4, 'advanced', 'd7a76fa6b3727895cbdc6a8098b5dd05.png', 1, '2025-03-16 20:03:34', '2025-03-16 20:03:40'),
+(11, 'Magang Part 1', 'magang-part-1', 'Ini adalah task untuk anak magang minggu pertama', 4, 'beginner', 'f5fa8551efded55cd983a98bbd3e0dbb.png', 1, '2025-03-16 23:55:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -105,7 +134,11 @@ INSERT INTO `enrollments` (`id`, `user_id`, `course_id`, `enrolled_at`) VALUES
 (6, 1, 8, '2025-03-13 23:46:48'),
 (7, 1, 9, '2025-03-14 01:14:49'),
 (8, 2, 8, '2025-03-16 18:01:51'),
-(9, 2, 9, '2025-03-16 18:02:02');
+(9, 2, 9, '2025-03-16 18:02:02'),
+(10, 1, 10, '2025-03-16 22:21:12'),
+(11, 2, 10, '2025-03-16 23:22:58'),
+(12, 3, 10, '2025-03-16 23:45:46'),
+(13, 1, 11, '2025-03-17 00:06:04');
 
 -- --------------------------------------------------------
 
@@ -142,7 +175,11 @@ INSERT INTO `lessons` (`id`, `course_id`, `title`, `content`, `order_number`, `c
 (13, 8, 'Test 1', 'asd', 3, '2025-03-14 00:10:43'),
 (14, 8, 'Quiz 2', 'asd', 4, '2025-03-14 00:17:16'),
 (15, 9, 'PHP Array [Quiz]', 'Ini adaah quiz untuk PHP Array', 1, '2025-03-14 01:08:57'),
-(16, 9, 'HTML Quiz', 'Quiz untuk HTML Magang', 3, '2025-03-14 01:44:29');
+(16, 9, 'HTML Quiz', 'Quiz untuk HTML Magang', 3, '2025-03-14 01:44:29'),
+(17, 10, 'HTML Koding Live', 'Kerjakan Live Coding ini', 1, '2025-03-16 20:04:24'),
+(18, 11, 'HTML', 'HTML adalah hyper text mel', 1, '2025-03-16 23:55:30'),
+(19, 11, 'PHP', 'Ini adalah PHP\r\n\r\nPhp dapat dikatakan sebagai bahasa PHP', 2, '2025-03-16 23:55:46'),
+(20, 11, 'CSS', 'ini adalah CSS, css untuk memperbagus tab kalian', 3, '2025-03-16 23:55:55');
 
 -- --------------------------------------------------------
 
@@ -175,7 +212,11 @@ INSERT INTO `progress` (`id`, `user_id`, `lesson_id`, `completed`, `created_at`,
 (9, 2, 10, 1, '2025-03-13 22:49:16', '2025-03-13 22:49:16'),
 (10, 1, 10, 1, '2025-03-13 23:41:15', '2025-03-13 23:41:15'),
 (11, 1, 16, 1, '2025-03-14 01:46:33', '2025-03-14 01:55:13'),
-(12, 2, 16, 1, '2025-03-16 18:01:35', '2025-03-16 18:01:35');
+(12, 2, 16, 1, '2025-03-16 18:01:35', '2025-03-16 18:01:35'),
+(13, 2, 17, 1, '2025-03-16 23:24:24', '2025-03-16 23:24:24'),
+(14, 1, 17, 0, '2025-03-16 23:52:25', '2025-03-16 23:52:27'),
+(15, 1, 18, 1, '2025-03-17 00:11:52', '2025-03-17 00:34:32'),
+(16, 1, 20, 0, '2025-03-17 20:40:19', '2025-03-17 20:40:19');
 
 -- --------------------------------------------------------
 
@@ -207,7 +248,8 @@ INSERT INTO `questions` (`id`, `quiz_id`, `question_text`, `question_type`, `poi
 (7, 7, 'Apa itu array', 'multiple_choice', 50, 1, '2025-03-14 01:10:05'),
 (8, 7, 'Contoh array bagaimana', 'multiple_choice', 50, 1, '2025-03-14 01:14:00'),
 (9, 8, 'Apa itu html', 'multiple_choice', 50, 1, '2025-03-14 01:45:42'),
-(10, 8, 'HTML digunakan untuk apa', 'multiple_choice', 50, 1, '2025-03-14 01:46:01');
+(10, 8, 'HTML digunakan untuk apa', 'multiple_choice', 50, 1, '2025-03-14 01:46:01'),
+(11, 9, 'HTML adalah', 'multiple_choice', 100, 1, '2025-03-17 00:04:55');
 
 -- --------------------------------------------------------
 
@@ -256,7 +298,11 @@ INSERT INTO `question_options` (`id`, `question_id`, `option_text`, `is_correct`
 (25, 10, '1', 0, 1, '2025-03-14 01:46:01'),
 (26, 10, '1', 0, 2, '2025-03-14 01:46:01'),
 (27, 10, '1', 0, 3, '2025-03-14 01:46:01'),
-(28, 10, 'UNtuk Membaut web', 1, 4, '2025-03-14 01:46:01');
+(28, 10, 'UNtuk Membaut web', 1, 4, '2025-03-14 01:46:01'),
+(29, 11, '1', 0, 1, '2025-03-17 00:04:55'),
+(30, 11, '2', 0, 2, '2025-03-17 00:04:55'),
+(31, 11, '3', 0, 3, '2025-03-17 00:04:55'),
+(32, 11, 'HTML adalah', 1, 4, '2025-03-17 00:04:55');
 
 -- --------------------------------------------------------
 
@@ -286,7 +332,8 @@ INSERT INTO `quizzes` (`id`, `lesson_id`, `title`, `description`, `passing_score
 (5, 1, 'Quiz: Quiz 2', 'Quiz untuk pelajaran: Quiz 2', 100, '2025-03-14 00:17:16', NULL),
 (6, 1, 'Quiz HTML Introduction', 'Test your knowledge about HTML basics', 70, '2025-03-14 07:40:00', NULL),
 (7, 15, 'PHP Array', 'Ini untuk PHP array', 100, '2025-03-14 01:09:33', NULL),
-(8, 16, 'HTML Quiz', 'HTML untuk quiz', 70, '2025-03-14 01:45:22', NULL);
+(8, 16, 'HTML Quiz', 'HTML untuk quiz', 70, '2025-03-14 01:45:22', NULL),
+(9, 18, 'HTML', 'asd', 70, '2025-03-17 00:04:34', NULL);
 
 -- --------------------------------------------------------
 
@@ -320,7 +367,15 @@ INSERT INTO `quiz_attempts` (`id`, `user_id`, `quiz_id`, `score`, `passed`, `com
 (14, 1, 8, '100.00', 1, '2025-03-14 08:55:13'),
 (15, 2, 8, '100.00', 1, '2025-03-17 01:01:35'),
 (16, 2, 8, '0.00', 0, '2025-03-17 01:02:31'),
-(17, 2, 8, '50.00', 0, '2025-03-17 01:02:36');
+(17, 2, 8, '50.00', 0, '2025-03-17 01:02:36'),
+(18, 1, 9, '100.00', 1, '2025-03-17 07:11:52'),
+(19, 1, 9, '100.00', 1, '2025-03-17 07:20:43'),
+(20, 1, 9, '100.00', 1, '2025-03-17 07:23:46'),
+(21, 1, 9, '100.00', 1, '2025-03-17 07:27:23'),
+(22, 1, 9, '100.00', 1, '2025-03-17 07:30:03'),
+(23, 1, 9, '0.00', 0, '2025-03-17 07:33:58'),
+(24, 1, 9, '100.00', 1, '2025-03-17 07:34:02'),
+(25, 1, 9, '100.00', 1, '2025-03-17 07:34:32');
 
 -- --------------------------------------------------------
 
@@ -344,7 +399,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `is_active`, `created_at`) VALUES
 (1, 'admin', 'admin@academys.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', 1, '2025-03-14 02:28:30'),
-(2, 'user1', 'user1@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'user', 1, '2025-03-14 02:28:30');
+(2, 'user1', 'user1@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'user', 1, '2025-03-14 02:28:30'),
+(3, 'diva', 'cipta5772@gmail.com', '$2y$10$jto/dHzKSw8gCS.SlpfW9O6VyJfFCOhZO.7vj9Y1Zq6lKUWpWJ/mu', 'user', 1, '2025-03-17 06:45:04');
 
 -- --------------------------------------------------------
 
@@ -392,7 +448,41 @@ INSERT INTO `user_answers` (`id`, `attempt_id`, `question_id`, `selected_option_
 (29, 16, 9, 23, NULL, 0, 0),
 (30, 16, 10, 27, NULL, 0, 0),
 (31, 17, 9, 24, NULL, 1, 50),
-(32, 17, 10, 25, NULL, 0, 0);
+(32, 17, 10, 25, NULL, 0, 0),
+(33, 18, 11, 32, NULL, 1, 100),
+(34, 19, 11, 32, NULL, 1, 100),
+(35, 20, 11, 32, NULL, 1, 100),
+(36, 21, 11, 32, NULL, 1, 100),
+(37, 22, 11, 32, NULL, 1, 100),
+(38, 23, 11, 31, NULL, 0, 0),
+(39, 24, 11, 32, NULL, 1, 100),
+(40, 25, 11, 32, NULL, 1, 100);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_coding_submissions`
+--
+
+CREATE TABLE `user_coding_submissions` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `exercise_id` int(11) NOT NULL,
+  `code` text NOT NULL,
+  `is_correct` tinyint(1) DEFAULT 0,
+  `attempts` int(11) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_coding_submissions`
+--
+
+INSERT INTO `user_coding_submissions` (`id`, `user_id`, `exercise_id`, `code`, `is_correct`, `attempts`, `created_at`) VALUES
+(1, 1, 1, '<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>Halaman Pertamaku</title>\r\n</head>\r\n<body>\r\n    <h1>Selamat Datang di Website Saya</h1>\r\n    <p>Ini adalah halaman web pertama yang saya buat dengan HTML</p>\r\n    \r\n    <h2>Tentang Saya</h2>\r\n    <p>Saya adalah seorang siswa yang sedang belajar pemrograman web. Saya sangat tertarik dengan HTML dan ingin menjadi web developer.</p>\r\n</body>\r\n</html>', 1, 39, '2025-03-17 03:46:14'),
+(2, 2, 1, '<!DOCTYPE html>\n<html>\n<head>\n    <title>Halaman Pertamaku</title>\n</head>\n<body>\n    <h1>Selamat Datang di Website Saya</h1>\n    <p>Ini adalah halaman web pertama yang saya buat dengan HTML</p>\n    \n    <h2>Tentang Saya</h2>\n    <p>Saya adalah seorang siswa yang sedang belajar pemrograman web. Saya sangat tertarik dengan HTML dan ingin menjadi web developer.</p>\n</body>\n</html>', 1, 1, '2025-03-17 06:23:51'),
+(3, 1, 2, 'a', 1, 4, '2025-03-17 07:06:43'),
+(5, 1, 4, '<?php\necho \"shit!\";\n?>', 0, 5, '2025-03-18 07:40:08');
 
 --
 -- Indexes for dumped tables
@@ -404,6 +494,13 @@ INSERT INTO `user_answers` (`id`, `attempt_id`, `question_id`, `selected_option_
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `slug` (`slug`);
+
+--
+-- Indexes for table `coding_exercises`
+--
+ALTER TABLE `coding_exercises`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `lesson_id` (`lesson_id`);
 
 --
 -- Indexes for table `courses`
@@ -483,6 +580,14 @@ ALTER TABLE `user_answers`
   ADD KEY `selected_option_id` (`selected_option_id`);
 
 --
+-- Indexes for table `user_coding_submissions`
+--
+ALTER TABLE `user_coding_submissions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `exercise_id` (`exercise_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -493,68 +598,86 @@ ALTER TABLE `categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `coding_exercises`
+--
+ALTER TABLE `coding_exercises`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `courses`
 --
 ALTER TABLE `courses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `enrollments`
 --
 ALTER TABLE `enrollments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `lessons`
 --
 ALTER TABLE `lessons`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `progress`
 --
 ALTER TABLE `progress`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `question_options`
 --
 ALTER TABLE `question_options`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `quizzes`
 --
 ALTER TABLE `quizzes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `quiz_attempts`
 --
 ALTER TABLE `quiz_attempts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user_answers`
 --
 ALTER TABLE `user_answers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+
+--
+-- AUTO_INCREMENT for table `user_coding_submissions`
+--
+ALTER TABLE `user_coding_submissions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `coding_exercises`
+--
+ALTER TABLE `coding_exercises`
+  ADD CONSTRAINT `coding_exercises_ibfk_1` FOREIGN KEY (`lesson_id`) REFERENCES `lessons` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `courses`
@@ -614,6 +737,13 @@ ALTER TABLE `user_answers`
   ADD CONSTRAINT `user_answers_ibfk_1` FOREIGN KEY (`attempt_id`) REFERENCES `quiz_attempts` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `user_answers_ibfk_2` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `user_answers_ibfk_3` FOREIGN KEY (`selected_option_id`) REFERENCES `question_options` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `user_coding_submissions`
+--
+ALTER TABLE `user_coding_submissions`
+  ADD CONSTRAINT `user_coding_submissions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `user_coding_submissions_ibfk_2` FOREIGN KEY (`exercise_id`) REFERENCES `coding_exercises` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

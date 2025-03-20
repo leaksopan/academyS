@@ -1,83 +1,91 @@
 # AcademyS - Platform Pembelajaran Online
 
-AcademyS adalah platform pembelajaran online yang memungkinkan pengguna untuk belajar pemrograman dan pengembangan web secara interaktif. Aplikasi ini dibangun menggunakan framework CodeIgniter.
+AcademyS adalah platform pembelajaran online yang menyediakan berbagai kursus dengan materi interaktif, quiz, dan latihan coding. Platform ini dirancang untuk memudahkan proses belajar mengajar secara online dengan fitur-fitur yang komprehensif.
 
-## Fitur
+## Fitur Utama
 
-- **Autentikasi Pengguna**: Registrasi, login, dan reset password
-- **Katalog Kursus**: Daftar kursus yang tersedia dengan filter berdasarkan kategori dan level
-- **Pembelajaran Interaktif**: Materi pembelajaran dengan editor kode interaktif
-- **Pelacakan Progres**: Pelacakan kemajuan belajar pengguna
-- **Dashboard Pengguna**: Tampilan kursus yang diikuti dan progres pembelajaran
-- **Profil Pengguna**: Pengaturan profil dan preferensi pengguna
-- **Panel Admin**: Pengelolaan kursus, pelajaran, kategori, dan pengguna
+### Untuk Pengguna
+- **Katalog Kursus**: Jelajahi berbagai kursus yang tersedia dengan kategori yang berbeda
+- **Materi Pembelajaran**: Akses materi pembelajaran dalam format teks dan multimedia
+- **Quiz Interaktif**: Uji pemahaman dengan quiz interaktif dan dapatkan feedback langsung
+- **Latihan Coding**: Praktikkan kemampuan coding dengan latihan langsung di browser
+- **Progress Tracking**: Pantau kemajuan belajar dan capaian di setiap kursus
+- **Diskusi**: Berpartisipasi dalam diskusi dengan instruktur dan sesama peserta
 
-## Persyaratan Sistem
+### Untuk Admin
+- **Manajemen Kursus**: Tambah, edit, dan hapus kursus
+- **Manajemen Materi**: Kelola materi pembelajaran dengan mudah
+- **Manajemen Quiz**: Buat dan kelola quiz dengan berbagai jenis pertanyaan
+- **Manajemen Latihan Coding**: Buat latihan coding dengan berbagai bahasa pemrograman
+- **Manajemen Pengguna**: Kelola pengguna dan hak akses
+- **Laporan dan Analitik**: Lihat laporan aktivitas dan performa pengguna
 
-- PHP 7.3 atau lebih tinggi
-- MySQL 5.7 atau lebih tinggi
-- Web server (Apache/Nginx)
-- XAMPP/WAMP/MAMP (untuk pengembangan lokal)
+## Teknologi yang Digunakan
 
-## Instalasi
+- **Backend**: PHP dengan framework CodeIgniter 3
+- **Frontend**: HTML, CSS, JavaScript, Bootstrap 5
+- **Database**: MySQL
+- **Editor Kode**: CodeMirror untuk latihan coding interaktif
+- **Autentikasi**: Sistem login dan registrasi dengan verifikasi email
 
-1. Clone repositori ini ke direktori web server Anda:
+## Cara Instalasi
+
+1. Clone repositori ini ke direktori web server Anda (misalnya: htdocs untuk XAMPP)
    ```
-   git clone https://github.com/username/academys.git
-   ```
-
-2. Pastikan XAMPP (Apache dan MySQL) sudah berjalan
-
-3. Buka browser dan akses URL berikut untuk mengimpor database:
-   ```
-   http://localhost/AcademyS/import_database.php
-   ```
-
-4. Setelah database berhasil diimpor, akses aplikasi di:
-   ```
-   http://localhost/AcademyS/
+   git clone https://github.com/username/AcademyS.git
    ```
 
-## Kredensial Demo
+2. Import database dari file `database.sql` ke MySQL
 
-Gunakan kredensial berikut untuk login:
+3. Konfigurasi koneksi database di `application/config/database.php`
 
-- **Admin**:
-  - Email: admin@academys.com
-  - Password: password
+4. Konfigurasi base URL di `application/config/config.php`
 
-- **User**:
-  - Email: user1@example.com
-  - Password: password
+5. Pastikan direktori `uploads` memiliki permission yang tepat (biasanya 755)
 
-## Struktur Direktori
+6. Akses aplikasi melalui browser: `http://localhost/AcademyS`
 
-```
-AcademyS/
-├── application/          # Direktori aplikasi CodeIgniter
-│   ├── config/           # File konfigurasi
-│   ├── controllers/      # Controller
-│   ├── models/           # Model
-│   ├── views/            # View
-│   └── ...
-├── assets/               # Aset statis (CSS, JS, gambar)
-│   ├── css/              # File CSS
-│   ├── js/               # File JavaScript
-│   └── images/           # Gambar
-├── system/               # Core CodeIgniter
-├── .htaccess             # Konfigurasi Apache
-├── database_setup.sql    # File SQL untuk setup database
-├── import_database.php   # Script untuk mengimpor database
-└── index.php             # File utama
-```
+## Struktur Aplikasi
 
-## Pengembangan
+- **Admin Panel**: Akses melalui `http://localhost/AcademyS/admin`
+- **User Dashboard**: Akses melalui `http://localhost/AcademyS/dashboard`
+- **Katalog Kursus**: Akses melalui `http://localhost/AcademyS/courses`
 
-Untuk menjalankan aplikasi dalam mode pengembangan:
+## Fitur Quiz
 
-1. Pastikan XAMPP (Apache dan MySQL) sudah berjalan
-2. Akses aplikasi di `http://localhost/AcademyS/`
+Quiz di AcademyS memiliki beberapa fitur utama:
+
+- **Multiple Choice**: Pertanyaan pilihan ganda dengan satu jawaban benar
+- **Essay**: Pertanyaan essay untuk jawaban yang lebih mendalam
+- **Nilai Otomatis**: Sistem penilaian otomatis untuk pertanyaan pilihan ganda
+- **Riwayat Quiz**: Melihat riwayat percobaan quiz dan nilai tertinggi
+- **Batas Nilai Kelulusan**: Setiap quiz memiliki batas nilai kelulusan yang dapat diatur
+
+Setelah menyelesaikan quiz, pengguna akan tetap berada di halaman quiz dan dapat melihat:
+- Nilai yang diperoleh pada percobaan tersebut
+- Nilai tertinggi dari semua percobaan
+- Status kelulusan (lulus/belum lulus)
+- Riwayat semua percobaan quiz
+
+## Fitur Latihan Coding
+
+Latihan coding di AcademyS mendukung beberapa bahasa pemrograman:
+
+- HTML
+- CSS
+- JavaScript
+- PHP
+
+Fitur latihan coding meliputi:
+- Editor kode interaktif dengan syntax highlighting
+- Preview hasil kode secara real-time
+- Validasi kode otomatis
+- Starter code dan solution code yang dapat diatur oleh admin
+
+## Kontribusi
+
+Jika Anda ingin berkontribusi pada pengembangan AcademyS, silakan fork repositori ini dan kirimkan pull request.
 
 ## Lisensi
 
-Proyek ini dilisensikan di bawah [MIT License](LICENSE).
+AcademyS dilisensikan di bawah [MIT License](LICENSE).

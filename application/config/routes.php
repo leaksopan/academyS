@@ -95,3 +95,12 @@ $route['admin/categories'] = 'admin/categories';
 $route['admin/categories/add'] = 'admin/add_category';
 $route['admin/categories/edit/(:num)'] = 'admin/edit_category/$1';
 $route['admin/categories/delete/(:num)'] = 'admin/delete_category/$1';
+
+// Coding Exercise Routes
+$route['admin/coding_exercises'] = 'admin/coding_exercises';
+$route['admin/add_coding_exercise'] = 'admin/add_coding_exercise';
+$route['admin/edit_coding_exercise/(:num)'] = 'admin/edit_coding_exercise/$1';
+$route['admin/delete_coding_exercise/(:num)'] = 'admin/delete_coding_exercise/$1';
+$route['coding/exercise/(:num)'] = 'coding/exercise/$1';
+$route['coding/execute'] = 'coding/execute';
+$route['coding/submit'] = 'coding/submit';

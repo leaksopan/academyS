@@ -110,6 +110,16 @@
                                 <i class="fas fa-plus-circle me-2"></i> Tambah Quiz
                             </a>
                         </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="<?= base_url('admin/coding_exercises') ?>" class="btn btn-dark btn-lg d-block">
+                                <i class="fas fa-code me-2"></i> Coding Exercises
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="<?= base_url('admin/add_coding_exercise') ?>" class="btn btn-info btn-lg d-block">
+                                <i class="fas fa-plus-circle me-2"></i> Tambah Exercise
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

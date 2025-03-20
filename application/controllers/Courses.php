@@ -12,6 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @property Enrollment_model $enrollment_model
  * @property Progress_model $progress_model
  * @property Quiz_model $quiz_model
+ * @property Coding_model $coding_model
  */
 class Courses extends CI_Controller {
 
@@ -24,6 +25,7 @@ class Courses extends CI_Controller {
         $this->load->model('enrollment_model');
         $this->load->model('progress_model');
         $this->load->model('quiz_model');
+        $this->load->model('coding_model');
     }
 
     public function index() {
@@ -67,9 +69,15 @@ class Courses extends CI_Controller {
         $this->load->view('templates/footer');
     }
     
-    public function lesson($course_slug, $lesson_id = null) {
+    public function lesson($course_slug = null, $lesson_id = null) {
         if (!$this->session->userdata('logged_in')) {
             redirect('auth/login');
+        }
+
+        // Jika course_slug kosong atau berisi double slash, redirect ke halaman courses
+        if ($course_slug === null || $course_slug === '') {
+            redirect('courses');
+            return;
         }
 
         // Jika lesson_id tidak diberikan, coba ambil dari course_slug (yang mungkin sebenarnya adalah lesson_id)
@@ -91,7 +99,21 @@ class Courses extends CI_Controller {
                     show_404();
                 }
             } else {
-                show_404();
+                // Coba ambil course berdasarkan slug
+                $course = $this->course_model->get_course_by_slug($course_slug);
+                if ($course) {
+                    // Ambil lesson pertama dari course
+                    $lessons = $this->lesson_model->get_lessons_by_course_id($course['id']);
+                    if (!empty($lessons)) {
+                        $lesson_id = $lessons[0]['id'];
+                    } else {
+                        $this->session->set_flashdata('error', 'Tidak ada lesson dalam kursus ini');
+                        redirect('courses/' . $course_slug);
+                        return;
+                    }
+                } else {
+                    show_404();
+                }
             }
         }
 
@@ -102,16 +124,40 @@ class Courses extends CI_Controller {
         $lesson = $this->lesson_model->get_lesson($lesson_id);
         $quiz = $this->quiz_model->get_quiz_by_lesson($lesson_id);
         
+        // Ambil coding exercises untuk lesson ini
+        $coding_exercises = $this->coding_model->get_exercises_by_lesson($lesson_id);
+        
         // Ambil semua pelajaran untuk kursus ini
         $lessons = $this->lesson_model->get_lessons_by_course_id($course['id']);
         
         // Ambil data progress user
         $progress = $this->progress_model->get_user_progress($user_id);
+        
+        // Ambil data hasil quiz tertinggi user jika ada quiz
+        $quiz_results = null;
+        if ($quiz) {
+            $attempts = $this->quiz_model->get_user_attempts($user_id, $quiz['id']);
+            if (!empty($attempts)) {
+                $highest_score = 0;
+                foreach ($attempts as $attempt) {
+                    if ($attempt['score'] > $highest_score) {
+                        $highest_score = $attempt['score'];
+                    }
+                }
+                $quiz_results = [
+                    'highest_score' => $highest_score,
+                    'attempts' => count($attempts),
+                    'passed' => ($highest_score >= $quiz['passing_score']) ? true : false
+                ];
+            }
+        }
 
         $data['title'] = $lesson['title'];
         $data['course'] = $course;
         $data['lesson'] = $lesson;
         $data['quiz'] = $quiz;
+        $data['quiz_results'] = $quiz_results;
+        $data['coding_exercises'] = $coding_exercises;
         $data['lessons'] = $lessons;
         $data['progress'] = $progress;
 
@@ -242,14 +288,11 @@ class Courses extends CI_Controller {
         }
 
         // Set flash message
-        $this->session->set_flashdata('success', 'Quiz berhasil diselesaikan dengan skor ' . number_format($score, 1) . '%');
+        $this->session->set_flashdata('success', 'Quiz berhasil diselesaikan dengan skor ' . number_format($score, 1) . '%' . 
+            ($passed ? ' dan Anda telah lulus!' : ' tetapi Anda belum mencapai nilai kelulusan.'));
         
-        // Redirect ke halaman kursus jika lulus, atau kembali ke quiz jika tidak
-        if ($passed) {
-            redirect('courses/' . $this->course_model->get_course($quiz['course_id'])['slug']);
-        } else {
-            redirect($_SERVER['HTTP_REFERER']);
-        }
+        // Redirect kembali ke halaman quiz yang sama (tetap di halaman quiz)
+        redirect($_SERVER['HTTP_REFERER']);
     }
 
     private function check_multiple_choice_answer($question_id, $user_answer) {

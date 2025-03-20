@@ -66,17 +66,88 @@
                             <div class="card-text">
                                 <?php echo $lesson['content']; ?>
                             </div>
-                            
-                            <?php if (isset($quiz)): ?>
-                                <div class="mt-4">
-                                    <a href="<?php echo base_url('courses/' . $course['slug'] . '/quiz/' . $lesson['id']); ?>" 
-                                       class="btn btn-primary">
-                                        <i class="fas fa-question-circle"></i> Mulai Quiz
-                                    </a>
-                                </div>
-                            <?php endif; ?>
                         </div>
                     </div>
+                    
+                    <!-- Quiz Section -->
+                    <?php if($quiz): ?>
+                        <div class="card mb-4">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0"><i class="fas fa-question-circle me-2"></i> Quiz</h5>
+                            </div>
+                            <div class="card-body">
+                                <h5><?= $quiz['title'] ?></h5>
+                                <p><?= $quiz['description'] ?></p>
+                                <p>Nilai Kelulusan: <?= $quiz['passing_score'] ?>%</p>
+                                
+                                <?php if(isset($quiz_results) && !empty($quiz_results)): ?>
+                                    <div class="alert <?= $quiz_results['passed'] ? 'alert-success' : 'alert-info' ?> mb-3">
+                                        <h6 class="mb-1"><i class="fas fa-trophy me-2"></i> Hasil Quiz Terbaik Anda</h6>
+                                        <div class="row mt-2">
+                                            <div class="col-md-6">
+                                                <p class="mb-1"><strong>Nilai Tertinggi:</strong> <span class="badge bg-<?= $quiz_results['passed'] ? 'success' : 'warning' ?> fs-6"><?= number_format($quiz_results['highest_score'], 1) ?>%</span></p>
+                                                <p class="mb-1"><strong>Jumlah Percobaan:</strong> <?= $quiz_results['attempts'] ?></p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p class="mb-1"><strong>Status:</strong> 
+                                                    <?php if($quiz_results['passed']): ?>
+                                                        <span class="badge bg-success">Lulus</span>
+                                                    <?php else: ?>
+                                                        <span class="badge bg-danger">Belum Lulus</span>
+                                                    <?php endif; ?>
+                                                </p>
+                                                <p class="mb-1"><strong>Target:</strong> <span class="badge bg-primary"><?= $quiz['passing_score'] ?>%</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <a href="<?= base_url('courses/' . $course['slug'] . '/quiz/' . $lesson['id']) ?>" class="btn btn-primary">
+                                    <?php if(isset($quiz_results) && !empty($quiz_results)): ?>
+                                        <i class="fas fa-redo me-1"></i> Coba Lagi Quiz
+                                    <?php else: ?>
+                                        <i class="fas fa-play me-1"></i> Mulai Quiz
+                                    <?php endif; ?>
+                                </a>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <!-- Coding Exercises Section -->
+                    <?php if(!empty($coding_exercises)): ?>
+                        <div class="card mb-4">
+                            <div class="card-header bg-dark text-white">
+                                <h5 class="mb-0"><i class="fas fa-code me-2"></i> Latihan Coding</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group">
+                                    <?php foreach($coding_exercises as $exercise): ?>
+                                        <a href="<?= base_url('coding/exercise/' . $exercise['id']) ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="mb-1"><?= $exercise['title'] ?></h6>
+                                                <small class="text-muted">
+                                                    <span class="badge bg-<?php 
+                                                        switch($exercise['language']) {
+                                                            case 'html': echo 'danger'; break;
+                                                            case 'css': echo 'info'; break;
+                                                            case 'javascript': echo 'warning'; break;
+                                                            case 'php': echo 'primary'; break;
+                                                            default: echo 'secondary';
+                                                        }
+                                                    ?>">
+                                                        <?= strtoupper($exercise['language']) ?>
+                                                    </span>
+                                                </small>
+                                            </div>
+                                            <span class="btn btn-sm btn-primary">
+                                                <i class="fas fa-code me-1"></i> Kerjakan
+                                            </span>
+                                        </a>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                     
                     <hr class="my-4">
                     

@@ -29,17 +29,68 @@
                 </div>
                 <div class="card-body">
                     <?php if (!empty($attempts)): ?>
-                        <div class="alert alert-info">
-                            <h5>Riwayat Percobaan</h5>
-                            <ul class="list-unstyled mb-0">
-                                <?php foreach ($attempts as $attempt): ?>
-                                    <li>
-                                        Skor: <?php echo number_format($attempt['score'], 1); ?>% 
-                                        (<?php echo $attempt['passed'] ? 'Lulus' : 'Tidak Lulus'; ?>)
-                                        - <?php echo date('d/m/Y H:i', strtotime($attempt['completed_at'])); ?>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
+                        <div class="alert alert-info mb-4">
+                            <h5 class="mb-3"><i class="fas fa-history me-2"></i> Riwayat Percobaan Quiz</h5>
+                            
+                            <?php 
+                            // Cari nilai tertinggi
+                            $highest_score = 0;
+                            $highest_attempt = null;
+                            foreach ($attempts as $attempt) {
+                                if ($attempt['score'] > $highest_score) {
+                                    $highest_score = $attempt['score'];
+                                    $highest_attempt = $attempt;
+                                }
+                            }
+                            ?>
+                            
+                            <?php if ($highest_attempt): ?>
+                                <div class="card mb-3 border-<?= $highest_attempt['passed'] ? 'success' : 'warning' ?>">
+                                    <div class="card-body py-2">
+                                        <h6 class="mb-2"><i class="fas fa-trophy me-2"></i> Nilai Tertinggi Anda</h6>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p class="mb-1"><strong>Skor:</strong> <span class="badge bg-<?= $highest_attempt['passed'] ? 'success' : 'warning' ?>"><?= number_format($highest_attempt['score'], 1) ?>%</span></p>
+                                                <p class="mb-1"><strong>Status:</strong> 
+                                                    <?php if($highest_attempt['passed']): ?>
+                                                        <span class="badge bg-success">Lulus</span>
+                                                    <?php else: ?>
+                                                        <span class="badge bg-danger">Belum Lulus</span>
+                                                    <?php endif; ?>
+                                                </p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p class="mb-1"><strong>Target:</strong> <span class="badge bg-primary"><?= $quiz['passing_score'] ?>%</span></p>
+                                                <p class="mb-1"><strong>Tanggal:</strong> <?= date('d/m/Y H:i', strtotime($highest_attempt['completed_at'])) ?></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <h6 class="mb-2"><i class="fas fa-list me-2"></i> Semua Percobaan (<?= count($attempts) ?>)</h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm table-bordered">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Tanggal</th>
+                                            <th>Skor</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($attempts as $key => $attempt): ?>
+                                            <tr>
+                                                <td><?= count($attempts) - $key ?></td>
+                                                <td><?= date('d/m/Y H:i', strtotime($attempt['completed_at'])) ?></td>
+                                                <td><span class="badge bg-<?= $attempt['passed'] ? 'success' : 'warning' ?>"><?= number_format($attempt['score'], 1) ?>%</span></td>
+                                                <td><?= $attempt['passed'] ? '<span class="badge bg-success">Lulus</span>' : '<span class="badge bg-danger">Belum Lulus</span>' ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     <?php endif; ?>
 
