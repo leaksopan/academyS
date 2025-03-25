@@ -62,7 +62,7 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a href="<?= base_url('admin/lessons') ?>" class="text-white">Lihat Detail</a>
+                    <a href="<?= base_url('admin/courses') ?>" class="text-white">Lihat Detail</a>
                     <i class="fas fa-angle-right"></i>
                 </div>
             </div>
