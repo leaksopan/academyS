@@ -114,6 +114,7 @@
 </section>
 
 <!-- Call to Action -->
+<?php if (!$this->session->userdata('user_id')): ?>
 <section class="py-5 bg-primary text-white">
     <div class="container">
         <div class="row align-items-center">
@@ -126,4 +127,5 @@
             </div>
         </div>
     </div>
-</section> 
+</section>
+<?php endif; ?> 
