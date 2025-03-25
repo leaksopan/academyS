@@ -84,4 +84,38 @@ class User_model extends CI_Model {
         $this->db->where('id', $user_id);
         return $this->db->delete('users');
     }
+    
+    /**
+     * Mendapatkan daftar pengguna dengan filter pencarian, role, dan status
+     *
+     * @param string|null $search Kata kunci pencarian
+     * @param string|null $role Filter berdasarkan role
+     * @param string|null $status Filter berdasarkan status (aktif/nonaktif)
+     * @return array Daftar pengguna yang terfilter
+     */
+    public function get_filtered_users($search = null, $role = null, $status = null) {
+        // Jika ada kata kunci pencarian
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like('username', $search);
+            $this->db->or_like('email', $search);
+            $this->db->group_end();
+        }
+        
+        // Filter berdasarkan role
+        if (!empty($role)) {
+            $this->db->where('role', $role);
+        }
+        
+        // Filter berdasarkan status
+        if ($status !== null && $status !== '') {
+            $this->db->where('is_active', $status);
+        }
+        
+        // Urutkan berdasarkan tanggal pembuatan terbaru
+        $this->db->order_by('created_at', 'DESC');
+        
+        $query = $this->db->get('users');
+        return $query->result_array();
+    }
 } 

@@ -24,6 +24,32 @@ class Quiz_model extends CI_Model {
         return $query->result_array();
     }
     
+    public function get_filtered_quizzes($search = '', $course_id = null) {
+        $this->db->select('quizzes.*, lessons.title as lesson_title, courses.title as course_title, courses.slug as course_slug');
+        $this->db->from('quizzes');
+        $this->db->join('lessons', 'lessons.id = quizzes.lesson_id', 'left');
+        $this->db->join('courses', 'courses.id = lessons.course_id', 'left');
+        
+        // Filter berdasarkan kata kunci pencarian
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like('quizzes.title', $search);
+            $this->db->or_like('quizzes.description', $search);
+            $this->db->or_like('courses.title', $search);
+            $this->db->or_like('lessons.title', $search);
+            $this->db->group_end();
+        }
+        
+        // Filter berdasarkan course_id
+        if (!empty($course_id)) {
+            $this->db->where('courses.id', $course_id);
+        }
+        
+        $this->db->order_by('quizzes.id', 'DESC');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
     public function add_quiz($data) {
         $this->db->insert('quizzes', $data);
         return $this->db->insert_id();

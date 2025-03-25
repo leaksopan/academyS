@@ -39,8 +39,12 @@
     <!-- Filter by Category -->
     <div class="card mb-4">
         <div class="card-body">
-            <form action="<?= base_url('admin/courses') ?>" method="get" class="row g-3">
-                <div class="col-md-4">
+            <form action="<?= base_url('admin/courses') ?>" method="get" class="row g-3" id="searchForm">
+                <div class="col-md-3">
+                    <label for="search" class="form-label">Cari Kursus</label>
+                    <input type="text" class="form-control" id="search" name="search" placeholder="Cari judul kursus..." value="<?= isset($_GET['search']) ? $_GET['search'] : '' ?>">
+                </div>
+                <div class="col-md-3">
                     <label for="category" class="form-label">Filter berdasarkan Kategori</label>
                     <select name="category" id="category" class="form-select">
                         <option value="">Semua Kategori</option>
@@ -51,7 +55,7 @@
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="level" class="form-label">Filter berdasarkan Level</label>
                     <select name="level" id="level" class="form-select">
                         <option value="">Semua Level</option>
@@ -60,7 +64,7 @@
                         <option value="advanced" <?= isset($_GET['level']) && $_GET['level'] == 'advanced' ? 'selected' : '' ?>>Lanjutan</option>
                     </select>
                 </div>
-                <div class="col-md-4 d-flex align-items-end">
+                <div class="col-md-3 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary me-2">Filter</button>
                     <a href="<?= base_url('admin/courses') ?>" class="btn btn-secondary">Reset</a>
                 </div>
@@ -149,4 +153,28 @@
             </div>
         </div>
     </div>
-</div> 
+</div>
+
+<script>
+$(document).ready(function() {
+    // Variabel untuk menyimpan timeout
+    var typingTimer;
+    var doneTypingInterval = 500; // waktu dalam ms (0.5 detik)
+    
+    // Jalankan pencarian saat mengetik di input pencarian
+    $('#search').on('keyup', function() {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(submitForm, doneTypingInterval);
+    });
+    
+    // Jalankan pencarian saat memilih filter dropdown
+    $('#category, #level').on('change', function() {
+        submitForm();
+    });
+    
+    // Fungsi untuk submit form
+    function submitForm() {
+        $('#searchForm').submit();
+    }
+});
+</script> 

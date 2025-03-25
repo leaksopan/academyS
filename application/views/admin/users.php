@@ -36,6 +36,38 @@
         </div>
     <?php endif; ?>
     
+    <!-- Search & Filter Section -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form action="<?= base_url('admin/users') ?>" method="get" class="row g-3" id="searchForm">
+                <div class="col-md-4">
+                    <label for="search" class="form-label">Cari Pengguna</label>
+                    <input type="text" class="form-control" id="search" name="search" placeholder="Cari username, email, nama..." value="<?= isset($search) ? $search : '' ?>">
+                </div>
+                <div class="col-md-3">
+                    <label for="role" class="form-label">Filter berdasarkan Role</label>
+                    <select name="role" id="role" class="form-select">
+                        <option value="">Semua Role</option>
+                        <option value="admin" <?= isset($role) && $role == 'admin' ? 'selected' : '' ?>>Admin</option>
+                        <option value="user" <?= isset($role) && $role == 'user' ? 'selected' : '' ?>>User</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="status" class="form-label">Filter berdasarkan Status</label>
+                    <select name="status" id="status" class="form-select">
+                        <option value="">Semua Status</option>
+                        <option value="1" <?= isset($status) && $status == '1' ? 'selected' : '' ?>>Aktif</option>
+                        <option value="0" <?= isset($status) && $status == '0' ? 'selected' : '' ?>>Nonaktif</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary me-2">Filter</button>
+                    <a href="<?= base_url('admin/users') ?>" class="btn btn-secondary">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <!-- Users Table -->
     <div class="card">
         <div class="card-body">
@@ -94,4 +126,28 @@
             </div>
         </div>
     </div>
-</div> 
+</div>
+
+<script>
+$(document).ready(function() {
+    // Variabel untuk menyimpan timeout
+    var typingTimer;
+    var doneTypingInterval = 500; // waktu dalam ms (0.5 detik)
+    
+    // Jalankan pencarian saat mengetik di input pencarian
+    $('#search').on('keyup', function() {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(submitForm, doneTypingInterval);
+    });
+    
+    // Jalankan pencarian saat memilih filter dropdown
+    $('#role, #status').on('change', function() {
+        submitForm();
+    });
+    
+    // Fungsi untuk submit form
+    function submitForm() {
+        $('#searchForm').submit();
+    }
+});
+</script> 

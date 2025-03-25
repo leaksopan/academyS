@@ -48,7 +48,19 @@ class Admin extends CI_Controller {
     
     public function users() {
         $data['title'] = 'Manage Users - AcademyS';
-        $data['users'] = $this->user_model->get_all_users();
+        
+        // Filter dan pencarian
+        $search = $this->input->get('search');
+        $role = $this->input->get('role');
+        $status = $this->input->get('status');
+        
+        // Dapatkan daftar pengguna dengan filter
+        $data['users'] = $this->user_model->get_filtered_users($search, $role, $status);
+        
+        // Kirim variabel filter ke view
+        $data['search'] = $search;
+        $data['role'] = $role;
+        $data['status'] = $status;
         
         $this->load->view('templates/header', $data);
         $this->load->view('admin/users', $data);
@@ -57,7 +69,14 @@ class Admin extends CI_Controller {
     
     public function courses() {
         $data['title'] = 'Manage Courses - AcademyS';
-        $data['courses'] = $this->course_model->get_all_courses();
+        
+        // Filter dan pencarian
+        $search = $this->input->get('search');
+        $category_id = $this->input->get('category');
+        $level = $this->input->get('level');
+        
+        // Dapatkan daftar kursus dengan filter
+        $data['courses'] = $this->course_model->get_filtered_courses($search, $category_id, $level);
         $data['categories'] = $this->course_model->get_categories();
         
         $this->load->view('templates/header', $data);
@@ -425,6 +444,8 @@ class Admin extends CI_Controller {
     // Mengelola quiz
     public function quizzes() {
         $lesson_id = $this->input->get('lesson_id');
+        $search = $this->input->get('search');
+        $course_id = $this->input->get('course_id');
         
         if ($lesson_id) {
             // Jika ada lesson_id, tampilkan quiz untuk lesson tersebut
@@ -443,7 +464,10 @@ class Admin extends CI_Controller {
             $this->load->model(['quiz_model', 'lesson_model', 'course_model']);
             
             $data['title'] = 'Manage All Quizzes - AcademyS';
-            $data['quizzes'] = $this->quiz_model->get_all_quizzes();
+            $data['quizzes'] = $this->quiz_model->get_filtered_quizzes($search, $course_id);
+            $data['courses'] = $this->course_model->get_all_courses();
+            $data['search'] = $search;
+            $data['course_id'] = $course_id;
             
             $this->load->view('templates/header', $data);
             $this->load->view('admin/all_quizzes', $data);
@@ -990,14 +1014,16 @@ class Admin extends CI_Controller {
     
     // Mengelola Coding Exercises
     public function coding_exercises() {
-        if (!$this->session->userdata('logged_in')) {
-            redirect('auth/login');
-        }
+        $data['title'] = 'Coding Exercises - AcademyS';
         
-        $this->load->model('coding_model');
+        // Filter dan pencarian
+        $search = $this->input->get('search');
+        $course_id = $this->input->get('course_id');
+        $language = $this->input->get('language');
         
-        $data['title'] = 'Kelola Coding Exercises - AcademyS';
-        $data['exercises'] = $this->coding_model->get_all_exercises();
+        // Dapatkan daftar coding exercises dengan filter
+        $data['exercises'] = $this->coding_model->get_filtered_exercises($search, $course_id, $language);
+        $data['courses'] = $this->course_model->get_all_courses();
         
         $this->load->view('templates/header', $data);
         $this->load->view('admin/coding_exercises', $data);
