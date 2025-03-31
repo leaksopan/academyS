@@ -25,7 +25,7 @@ class Coding_model extends CI_Model {
         $this->db->join('lessons', 'lessons.id = coding_exercises.lesson_id', 'left');
         $this->db->where('coding_exercises.id', $id);
         $query = $this->db->get();
-        return $query->row_array();
+        return $query->row_array();//Mengembalikan data exercise berdasarkan id
     }
     
     public function get_exercises_by_lesson($lesson_id) {
