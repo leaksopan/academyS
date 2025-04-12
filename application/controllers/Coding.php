@@ -24,7 +24,6 @@ class Coding extends CI_Controller {
         $this->load->library(['session', 'form_validation']);
         $this->load->helper(['url', 'form']);
         
-        // Cek apakah user sudah login
         if (!$this->session->userdata('logged_in')) {
             redirect('auth/login');
         }

@@ -92,7 +92,7 @@
                                     <td><?= $user['id'] ?></td>
                                     <td><?= $user['username'] ?></td>
                                     <td><?= $user['email'] ?></td>
-                                    <td><?= $user['full_name'] ?? '-' ?></td>
+                                    
                                     <td>
                                         <span class="badge <?= $user['role'] === 'admin' ? 'bg-danger' : 'bg-primary' ?>">
                                             <?= ucfirst($user['role']) ?>

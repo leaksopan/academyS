@@ -194,7 +194,7 @@
                                                 <span class="course-level level-<?= $course['level'] ?>"><?= ucfirst($course['level']) ?></span>
                                                 <h5 class="card-title"><?= $course['title'] ?></h5>
                                                 <p class="card-text"><?= character_limiter($course['description'], 80) ?></p>
-                                                <a href="<?= base_url('courses/' . $course['slug']) ?>" class="btn btn-outline-primary btn-sm">View Course</a>
+                                                <a href="<?= base_url('courses/' . $course['slug']) ?>" class="btn btn-outline-primary btn-sm">lihat kursus</a>
                                             </div>
                                         </div>
                                     </div>
