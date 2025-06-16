@@ -27,28 +27,28 @@
             <div class="col-lg-8">
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h4 class="mb-0">About This Course</h4>
+                        <h4 class="mb-0">Tentang Kursus Ini</h4>
                     </div>
                     <div class="card-body">
                         <p><?= $course['description'] ?></p>
                         
-                        <h5 class="mt-4">What You'll Learn</h5>
+                        <h5 class="mt-4">Apa yang Akan Kamu Pelajari</h5>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
                                 <i class="fas fa-check-circle text-success me-2"></i> 
-                                Understand the fundamentals of <?= $course['title'] ?>
+                                Memahami dasar-dasar <?= $course['title'] ?>
                             </li>
                             <li class="list-group-item">
                                 <i class="fas fa-check-circle text-success me-2"></i> 
-                                Build real-world projects to apply your knowledge
+                                Membangun proyek dunia nyata untuk menerapkan pengetahuan Anda
                             </li>
                             <li class="list-group-item">
                                 <i class="fas fa-check-circle text-success me-2"></i> 
-                                Master best practices and industry standards
+                                Menguasai praktik terbaik dan standar industri
                             </li>
                             <li class="list-group-item">
                                 <i class="fas fa-check-circle text-success me-2"></i> 
-                                Gain practical experience through hands-on exercises
+                                Mendapatkan pengalaman praktis melalui latihan langsung
                             </li>
                         </ul>
                     </div>
@@ -56,27 +56,27 @@
                 
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="mb-0">Course Content</h4>
+                        <h4 class="mb-0">Konten Kursus</h4>
                     </div>
                     <div class="card-body">
                         <div class="accordion" id="lessonAccordion">
                             <?php if (empty($lessons)): ?>
-                                <p>No lessons available for this course yet.</p>
+                                <p>Belum ada pelajaran tersedia untuk kursus ini.</p>
                             <?php else: ?>
                                 <?php foreach ($lessons as $index => $lesson): ?>
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" id="heading<?= $lesson['id'] ?>">
                                             <button class="accordion-button <?= $index > 0 ? 'collapsed' : '' ?>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?= $lesson['id'] ?>" aria-expanded="<?= $index === 0 ? 'true' : 'false' ?>" aria-controls="collapse<?= $lesson['id'] ?>">
-                                                Lesson <?= $index + 1 ?>: <?= $lesson['title'] ?>
+                                                Pelajaran <?= $index + 1 ?>: <?= $lesson['title'] ?>
                                             </button>
                                         </h2>
                                         <div id="collapse<?= $lesson['id'] ?>" class="accordion-collapse collapse <?= $index === 0 ? 'show' : '' ?>" aria-labelledby="heading<?= $lesson['id'] ?>" data-bs-parent="#lessonAccordion">
                                             <div class="accordion-body">
                                                 <p><?= character_limiter(strip_tags($lesson['content']), 150) ?></p>
                                                 <?php if ($this->session->userdata('logged_in')): ?>
-                                                    <a href="<?= base_url('courses/' . $course['slug'] . '/lesson/' . $lesson['id']) ?>" class="btn btn-primary btn-sm">Start Lesson</a>
+                                                    <a href="<?= base_url('courses/' . $course['slug'] . '/lesson/' . $lesson['id']) ?>" class="btn btn-primary btn-sm">Mulai Pelajaran</a>
                                                 <?php else: ?>
-                                                    <a href="<?= base_url('login') ?>" class="btn btn-outline-primary btn-sm">Log in to access</a>
+                                                    <a href="<?= base_url('login') ?>" class="btn btn-outline-primary btn-sm">Masuk untuk mengakses</a>
                                                 <?php endif; ?>
                                             </div>
                                         </div>
@@ -94,17 +94,17 @@
                         <?php if ($this->session->userdata('logged_in')): ?>
                             <?php if (isset($is_enrolled) && $is_enrolled): ?>
                                 <div class="alert alert-success">
-                                    <i class="fas fa-check-circle me-2"></i> You are enrolled in this course
+                                    <i class="fas fa-check-circle me-2"></i> Anda terdaftar dalam kursus ini
                                 </div>
-                                <a href="<?= base_url('courses/' . $course['slug'] . '/lesson/' . $lessons[0]['id']) ?>" class="btn btn-primary btn-lg w-100">Continue Learning</a>
+                                <a href="<?= base_url('courses/' . $course['slug'] . '/lesson/' . $lessons[0]['id']) ?>" class="btn btn-primary btn-lg w-100">Lanjutkan Belajar</a>
                             <?php else: ?>
-                                <h4 class="mb-3">Ready to start learning?</h4>
-                                <a href="<?= base_url('enroll/' . $course['id']) ?>" class="btn btn-primary btn-lg w-100">Enroll Now - It's Free!</a>
+                                <h4 class="mb-3">Siap untuk mulai belajar?</h4>
+                                <a href="<?= base_url('enroll/' . $course['id']) ?>" class="btn btn-primary btn-lg w-100">Daftar Sekarang - Gratis!</a>
                             <?php endif; ?>
                         <?php else: ?>
-                            <h4 class="mb-3">Ready to start learning?</h4>
-                            <a href="<?= base_url('login') ?>" class="btn btn-primary btn-lg w-100 mb-3">Log In to Enroll</a>
-                            <p class="mb-0">Don't have an account? <a href="<?= base_url('register') ?>">Sign up</a></p>
+                            <h4 class="mb-3">Siap untuk mulai belajar?</h4>
+                            <a href="<?= base_url('login') ?>" class="btn btn-primary btn-lg w-100 mb-3">Masuk untuk Mendaftar</a>
+                            <p class="mb-0">Belum punya akun? <a href="<?= base_url('register') ?>">Daftar</a></p>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -157,7 +157,7 @@
 <!-- Related Courses -->
 <section class="py-5 bg-light">
     <div class="container">
-        <h2 class="mb-4">Related Courses</h2>
+        <h2 class="mb-4">Kursus Terkait</h2>
         <div class="row">
             <?php for ($i = 0; $i < 3; $i++): ?>
                 <div class="col-md-4 mb-4">
@@ -166,10 +166,10 @@
                             <i class="fas fa-code fa-3x text-muted"></i>
                         </div>
                         <div class="card-body">
-                            <span class="course-level level-beginner">Beginner</span>
-                            <h5 class="card-title">Related Course Title</h5>
-                            <p class="card-text">This is a sample related course that you might be interested in based on your current selection.</p>
-                            <a href="#" class="btn btn-primary">View Course</a>
+                            <span class="course-level level-beginner">Pemula</span>
+                            <h5 class="card-title">Judul Kursus Terkait</h5>
+                            <p class="card-text">Ini adalah contoh kursus terkait yang mungkin Anda minati berdasarkan pilihan Anda saat ini.</p>
+                            <a href="#" class="btn btn-primary">Lihat Kursus</a>
                         </div>
                     </div>
                 </div>

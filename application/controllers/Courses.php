@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Courses Controller
@@ -14,9 +14,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @property Quiz_model $quiz_model
  * @property Coding_model $coding_model
  */
-class Courses extends CI_Controller {
+class Courses extends CI_Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->helper('url');
         $this->load->library('session');
@@ -28,48 +30,52 @@ class Courses extends CI_Controller {
         $this->load->model('coding_model');
     }
 
-    public function index() {
+    public function index()
+    {
         redirect('home/catalog');
     }
-    
-    public function view($slug) {
+
+    public function view($slug)
+    {
         $data['course'] = $this->course_model->get_course_by_slug($slug);
-        
+
         if (empty($data['course'])) {
             show_404();
         }
-        
+
         $data['title'] = $data['course']['title'] . ' - AcademyS';
         $data['lessons'] = $this->lesson_model->get_lessons_by_course_id($data['course']['id']);
-        
+
         // Cek apakah user sudah enroll kursus ini
         if ($this->session->userdata('logged_in')) {
             $user_id = $this->session->userdata('user_id');
             $data['is_enrolled'] = $this->enrollment_model->check_enrollment($user_id, $data['course']['id']);
             $data['enrolled_count'] = $this->enrollment_model->count_enrollments($data['course']['id']);
         }
-        
+
         $this->load->view('templates/header', $data);
         $this->load->view('courses/view', $data);
         $this->load->view('templates/footer');
     }
-    
-    public function category($category_slug) {
+
+    public function category($category_slug)
+    {
         $data['category'] = $this->course_model->get_category_by_slug($category_slug);
-        
+
         if (empty($data['category'])) {
             show_404();
         }
-        
+
         $data['title'] = $data['category']['name'] . ' Courses - AcademyS';
         $data['courses'] = $this->course_model->get_courses_by_category($data['category']['id']);
-        
+
         $this->load->view('templates/header', $data);
         $this->load->view('courses/category', $data);
         $this->load->view('templates/footer');
     }
-    
-    public function lesson($course_slug = null, $lesson_id = null) {
+
+    public function lesson($course_slug = null, $lesson_id = null)
+    {
         if (!$this->session->userdata('logged_in')) {
             redirect('auth/login');
         }
@@ -123,16 +129,16 @@ class Courses extends CI_Controller {
         $course = $this->course_model->get_course_by_slug($course_slug);
         $lesson = $this->lesson_model->get_lesson($lesson_id);
         $quiz = $this->quiz_model->get_quiz_by_lesson($lesson_id);
-        
+
         // Ambil coding exercises untuk lesson ini
         $coding_exercises = $this->coding_model->get_exercises_by_lesson($lesson_id);
-        
+
         // Ambil semua pelajaran untuk kursus ini
         $lessons = $this->lesson_model->get_lessons_by_course_id($course['id']);
-        
+
         // Ambil data progress user
         $progress = $this->progress_model->get_user_progress($user_id);
-        
+
         // Ambil data hasil quiz tertinggi user jika ada quiz
         $quiz_results = null;
         if ($quiz) {
@@ -166,7 +172,8 @@ class Courses extends CI_Controller {
         $this->load->view('templates/footer');
     }
 
-    public function quiz($course_slug, $lesson_id) {
+    public function quiz($course_slug, $lesson_id)
+    {
         if (!$this->session->userdata('logged_in')) {
             redirect('auth/login');
         }
@@ -177,12 +184,12 @@ class Courses extends CI_Controller {
         $course = $this->course_model->get_course_by_slug($course_slug);
         $lesson = $this->lesson_model->get_lesson($lesson_id);
         $quiz = $this->quiz_model->get_quiz_by_lesson($lesson_id);
-        
+
         if (!$quiz) {
             $this->session->set_flashdata('error', 'Quiz tidak ditemukan');
             redirect('courses/' . $course_slug . '/lesson/' . $lesson_id);
         }
-        
+
         $questions = $this->quiz_model->get_questions($quiz['id']);
         $attempts = $this->quiz_model->get_user_attempts($user_id, $quiz['id']);
 
@@ -199,17 +206,18 @@ class Courses extends CI_Controller {
         $this->load->view('templates/footer');
     }
 
-    public function submit_quiz() {
+    public function submit_quiz()
+    {
         if (!$this->session->userdata('logged_in')) {
             redirect('auth/login');
         }
 
         $this->load->model(['quiz_model', 'progress_model', 'course_model']);
-        
+
         $user_id = $this->session->userdata('user_id');
         $quiz_id = $this->input->post('quiz_id');
         $answers = $this->input->post('answers');
-        
+
         if (!$quiz_id || !$answers) {
             $this->session->set_flashdata('error', 'Data quiz tidak valid');
             redirect($_SERVER['HTTP_REFERER']);
@@ -222,9 +230,9 @@ class Courses extends CI_Controller {
             redirect($_SERVER['HTTP_REFERER']);
             return;
         }
-        
+
         $questions = $this->quiz_model->get_questions($quiz_id);
-        
+
         $total_points = 0;
         $earned_points = 0;
         $question_results = [];
@@ -232,11 +240,11 @@ class Courses extends CI_Controller {
         foreach ($questions as $question) {
             $total_points += $question['points'];
             $user_answer = isset($answers[$question['id']]) ? $answers[$question['id']] : null;
-            
+
             if ($question['question_type'] == 'multiple_choice') {
                 $is_correct = $this->check_multiple_choice_answer($question['id'], $user_answer);
                 $earned_points += $is_correct ? $question['points'] : 0;
-                
+
                 $question_results[] = [
                     'question_id' => $question['id'],
                     'selected_option_id' => $user_answer,
@@ -288,41 +296,43 @@ class Courses extends CI_Controller {
         }
 
         // Set flash message
-        $this->session->set_flashdata('success', 'Quiz berhasil diselesaikan dengan skor ' . number_format($score, 1) . '%' . 
+        $this->session->set_flashdata('success', 'Quiz berhasil diselesaikan dengan skor ' . number_format($score, 1) . '%' .
             ($passed ? ' dan Anda telah lulus!' : ' tetapi Anda belum mencapai nilai kelulusan.'));
-        
+
         // Redirect kembali ke halaman quiz yang sama (tetap di halaman quiz)
         redirect($_SERVER['HTTP_REFERER']);
     }
 
-    private function check_multiple_choice_answer($question_id, $user_answer) {
+    private function check_multiple_choice_answer($question_id, $user_answer)
+    {
         $this->load->model('quiz_model');
         $options = $this->quiz_model->get_question_options($question_id);
-        
+
         foreach ($options as $option) {
             if ($option['is_correct'] && $option['id'] == $user_answer) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
-    public function enroll() {
+
+    public function enroll()
+    {
         if (!$this->session->userdata('logged_in')) {
             echo json_encode(['success' => false, 'message' => 'Please log in to enroll in this course']);
             return;
         }
-        
+
         $user_id = $this->session->userdata('user_id');
         $course_id = $this->input->post('course_id');
-        
+
         // Check if already enrolled
         if ($this->enrollment_model->check_enrollment($user_id, $course_id)) {
             echo json_encode(['success' => false, 'message' => 'You are already enrolled in this course']);
             return;
         }
-        
+
         // Process enrollment
         if ($this->enrollment_model->enroll_user($user_id, $course_id)) {
             $course = $this->course_model->get_course($course_id);
@@ -331,4 +341,37 @@ class Courses extends CI_Controller {
             echo json_encode(['success' => false, 'message' => 'Failed to enroll in this course. Please try again.']);
         }
     }
-} 
+
+    public function update_lesson_video()
+    {
+        // Validasi AJAX request
+        if (!$this->input->is_ajax_request()) {
+            show_404();
+        }
+
+        // Cek apakah user adalah admin
+        if ($this->session->userdata('role') !== 'admin') {
+            $this->output->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'Akses ditolak']));
+            return;
+        }
+
+        $lesson_id = $this->input->post('lesson_id');
+        $video_url = $this->input->post('video_url');
+
+        if (empty($lesson_id)) {
+            $this->output->set_content_type('application/json')
+                ->set_output(json_encode(['error' => 'ID lesson tidak valid']));
+            return;
+        }
+
+        // Update video URL
+        $result = $this->lesson_model->update_lesson_video($lesson_id, $video_url);
+
+        $this->output->set_content_type('application/json')
+            ->set_output(json_encode([
+                'success' => (bool)$result,
+                'message' => $result ? 'URL video berhasil diperbarui' : 'Gagal memperbarui URL video'
+            ]));
+    }
+}

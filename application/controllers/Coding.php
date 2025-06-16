@@ -1,6 +1,21 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+/**
+ * Coding Controller
+ * 
+ * Controller untuk mengelola latihan coding dan memeriksa jawaban
+ * 
+ * @property CI_Session $session
+ * @property CI_Form_validation $form_validation
+ * @property CI_Input $input
+ * @property CI_Output $output
+ * @property CI_Upload $upload
+ * @property CI_Loader $load
+ * @property Coding_model $coding_model
+ * @property Lesson_model $lesson_model
+ * @property Course_model $course_model
+ */
 class Coding extends CI_Controller {
     
     public function __construct() {
@@ -9,7 +24,6 @@ class Coding extends CI_Controller {
         $this->load->library(['session', 'form_validation']);
         $this->load->helper(['url', 'form']);
         
-        // Cek apakah user sudah login
         if (!$this->session->userdata('logged_in')) {
             redirect('auth/login');
         }

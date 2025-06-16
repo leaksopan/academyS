@@ -25,7 +25,7 @@ class Coding_model extends CI_Model {
         $this->db->join('lessons', 'lessons.id = coding_exercises.lesson_id', 'left');
         $this->db->where('coding_exercises.id', $id);
         $query = $this->db->get();
-        return $query->row_array();
+        return $query->row_array();//Mengembalikan data exercise berdasarkan id
     }
     
     public function get_exercises_by_lesson($lesson_id) {
@@ -197,5 +197,44 @@ class Coding_model extends CI_Model {
             return true;
         }
         return false;
+    }
+    
+    /**
+     * Mendapatkan daftar coding exercises dengan filter pencarian dan filter
+     *
+     * @param string|null $search Kata kunci pencarian
+     * @param int|null $course_id Filter berdasarkan kursus
+     * @param string|null $language Filter berdasarkan bahasa (html/css/javascript/php)
+     * @return array Daftar exercises yang terfilter
+     */
+    public function get_filtered_exercises($search = null, $course_id = null, $language = null) {
+        $this->db->select('coding_exercises.*, lessons.title as lesson_title, courses.title as course_title');
+        $this->db->from('coding_exercises');
+        $this->db->join('lessons', 'lessons.id = coding_exercises.lesson_id', 'left');
+        $this->db->join('courses', 'courses.id = lessons.course_id', 'left');
+        
+        // Jika ada kata kunci pencarian
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like('coding_exercises.title', $search);
+            $this->db->or_like('lessons.title', $search);
+            $this->db->group_end();
+        }
+        
+        // Filter berdasarkan kursus
+        if (!empty($course_id)) {
+            $this->db->where('lessons.course_id', $course_id);
+        }
+        
+        // Filter berdasarkan bahasa
+        if (!empty($language)) {
+            $this->db->where('coding_exercises.language', $language);
+        }
+        
+        // Urutkan berdasarkan tanggal pembuatan terbaru
+        $this->db->order_by('coding_exercises.created_at', 'DESC');
+        
+        $query = $this->db->get();
+        return $query->result_array();
     }
 } 

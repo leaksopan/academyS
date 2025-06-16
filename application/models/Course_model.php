@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+
+
 class Course_model extends CI_Model {
     
     public function __construct() {
@@ -148,5 +150,39 @@ class Course_model extends CI_Model {
         // Hapus kategori
         $this->db->where('id', $id);
         return $this->db->delete('categories');
+    }
+    
+    /**
+     * Mendapatkan daftar kursus dengan filter pencarian, kategori, dan level
+     *
+     * @param string|null $search Kata kunci pencarian
+     * @param int|null $category_id Filter berdasarkan kategori
+     * @param string|null $level Filter berdasarkan level (beginner/intermediate/advanced)
+     * @return array Daftar kursus yang terfilter
+     */
+    public function get_filtered_courses($search = null, $category_id = null, $level = null) {
+        // Jika ada kata kunci pencarian
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like('title', $search);
+            $this->db->or_like('description', $search);
+            $this->db->group_end();
+        }
+        
+        // Filter berdasarkan kategori
+        if (!empty($category_id)) {
+            $this->db->where('category_id', $category_id);
+        }
+        
+        // Filter berdasarkan level
+        if (!empty($level)) {
+            $this->db->where('level', $level);
+        }
+        
+        // Urutkan berdasarkan tanggal pembuatan terbaru
+        $this->db->order_by('created_at', 'DESC');
+        
+        $query = $this->db->get('courses');
+        return $query->result_array();
     }
 } 
